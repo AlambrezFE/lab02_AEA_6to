@@ -1,0 +1,22 @@
+# Utilizar la imagen oficial de .NET SDK para crear la API
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+WORKDIR /app
+
+# Crear un nuevo proyecto Web API y copiar el archivo .cs
+RUN dotnet new webapi -n GifApi
+COPY GifApi.cs /app/GifApi/Controllers/
+
+# Restaurar dependencias y construir el proyecto
+WORKDIR /app/GifApi
+RUN dotnet restore
+RUN dotnet publish -c Release -o out
+
+# Imagen runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build-env /app/GifApi/out .
+
+# Exponer el puerto 80
+EXPOSE 80
+CMD ["dotnet", "GifApi.dll"]
+

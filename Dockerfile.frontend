@@ -1,0 +1,9 @@
+# Utilizar la imagen oficial de PHP
+FROM php:7.4-apache
+
+# Copiar el archivo index.php al contenedor
+COPY index.php /var/www/html/
+
+# Exponer el puerto 80
+EXPOSE 80
+
